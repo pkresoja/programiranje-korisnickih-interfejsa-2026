@@ -9,7 +9,9 @@ const router = useRouter()
 
 function login() {
     if (UserService.login(email.value, password.value)) {
-        router.push('/user')
+        const to = sessionStorage.getItem('to')
+        sessionStorage.removeItem('to')
+        router.push(to ?? '/user')
         return
     }
 

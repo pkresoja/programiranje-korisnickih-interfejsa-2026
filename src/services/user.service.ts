@@ -1,3 +1,4 @@
+import type { OrderModel } from "@/models/order.model"
 import type { UserModel } from "@/models/user.model"
 
 const USERS_KEY = 'pki_2026_users'
@@ -46,4 +47,18 @@ export class UserService {
         localStorage.removeItem(ACTIVE_USER_KEY)
     }
 
+    static addOrder(order: OrderModel) {
+        const activeUser = this.getActiveUser()
+        const users = this.getUsers()
+
+        if (activeUser) {
+            for (let user of users) {
+                if (user.email === activeUser.email) {
+                    user.orders.push(order)
+                }
+            }
+
+            localStorage.setItem(USERS_KEY, JSON.stringify(users))
+        }
+    }
 }
