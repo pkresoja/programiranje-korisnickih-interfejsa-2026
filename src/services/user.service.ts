@@ -61,4 +61,22 @@ export class UserService {
             localStorage.setItem(USERS_KEY, JSON.stringify(users))
         }
     }
+
+    static pay() {
+        const activeUser = this.getActiveUser()
+        const users = this.getUsers()
+        const now = new Date().toISOString()
+
+        if (activeUser) {
+            for (let user of users) {
+                if (user.email === activeUser.email) {
+                    for (let order of user.orders){
+                        order.paidAt = now 
+                    }
+                }
+            }
+
+            localStorage.setItem(USERS_KEY, JSON.stringify(users))
+        }
+    }
 }
