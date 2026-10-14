@@ -5,6 +5,7 @@ import DetailsView from '@/views/DetailsView.vue'
 import LoginView from '@/views/LoginView.vue'
 import UserView from '@/views/UserView.vue'
 import OrderView from '@/views/OrderView.vue'
+import AIDetails from '@/views/AIDetails.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,7 +26,7 @@ const router = createRouter({
     },
     {
       path: '/details/:id',
-      component: DetailsView,
+      component: AIDetails,
       meta: {
         title: 'Details'
       }

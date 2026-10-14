@@ -12,6 +12,7 @@ export class UserService {
                 {
                     email: 'user@example.com',
                     password: 'user123',
+                    destination: 'Zagreb',
                     orders: []
                 }
             ]))
@@ -70,9 +71,43 @@ export class UserService {
         if (activeUser) {
             for (let user of users) {
                 if (user.email === activeUser.email) {
-                    for (let order of user.orders){
-                        order.paidAt = now 
+                    for (let order of user.orders) {
+                        order.paidAt = now
                     }
+                }
+            }
+
+            localStorage.setItem(USERS_KEY, JSON.stringify(users))
+        }
+    }
+
+    static removeOrder(order: OrderModel) {
+        const activeUser = this.getActiveUser()
+        const users = this.getUsers()
+
+        if (activeUser) {
+            for (let user of users) {
+                if (user.email === activeUser.email) {
+                    for (let obj of user.orders) {
+                        if (order.createdAt == obj.createdAt) {
+                            obj.deletedAt = new Date().toISOString()
+                        }
+                    }
+                }
+            }
+
+            localStorage.setItem(USERS_KEY, JSON.stringify(users))
+        }
+    }
+
+    static changePassword(newPassword: string) {
+        const activeUser = this.getActiveUser()
+        const users = this.getUsers()
+
+        if (activeUser) {
+            for (let user of users) {
+                if (user.email === activeUser.email) {
+                    user.password = newPassword
                 }
             }
 

@@ -1,14 +1,31 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { UserService } from './services/user.service';
+import { ref } from 'vue';
 
 const router = useRouter()
 function logout() {
   if (!confirm('Are you sure you want to sign out?'))
     return
-  
+
   UserService.logout()
   router.push('/login')
+}
+
+const searchInput = ref<string>('')
+
+function search() {
+  const q = searchInput.value
+  if (q == '')
+    return
+
+  searchInput.value = ''
+  router.push({
+    path: '/',
+    query: {
+      'search': q
+    }
+  })
 }
 </script>
 
@@ -56,8 +73,9 @@ function logout() {
             </li>
           </template>
         </ul>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+        <form class="d-flex" role="search" @submit.prevent="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+            v-model="searchInput" />
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
       </div>

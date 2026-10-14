@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DetailsModel } from '@/models/details.mode';
+import type { DetailsModel } from '@/models/details.model';
 import { FlightService } from '@/services/flight.service';
 import { formatDate } from '@/utils';
 import { ref } from 'vue';

@@ -7,7 +7,7 @@ export interface OrderCardProps {
     orders: OrderModel[]
 }
 
-const {title, orders} = defineProps<OrderCardProps>()
+const { title, orders } = defineProps<OrderCardProps>()
 </script>
 
 <template>
@@ -15,7 +15,7 @@ const {title, orders} = defineProps<OrderCardProps>()
         <div class="card-header fw-bold">
             {{ title }}
         </div>
-        <div class="card-body">
+        <div class="card-body table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -46,7 +46,7 @@ const {title, orders} = defineProps<OrderCardProps>()
                             </span>
                         </td>
                         <td>{{ order.isReturnTicket ? 'Yes' : 'No' }}</td>
-                        <td>{{ order.ticketCount }} {{ order.pricePerTicket }}</td>
+                        <td>{{ order.ticketCount }}</td>
                         <td>{{ getPriceForOrder(order) }} EUR</td>
                         <td>
                             <slot name="options" :order="order"></slot>

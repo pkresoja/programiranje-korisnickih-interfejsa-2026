@@ -3,7 +3,8 @@ import InfoCard from '@/components/InfoCard.vue';
 import type { FlightModel } from '@/models/flight.model';
 import { FlightService } from '@/services/flight.service';
 import { formatDate } from '@/utils';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 const flights = ref<FlightModel[]>([])
 const flitered = ref<FlightModel[]>([])
@@ -12,11 +13,13 @@ const search = ref({
   from: 'any',
   to: 'any'
 })
+const route = useRoute()
 
 FlightService.getDepatures()
   .then(data => {
     flights.value = data
     flitered.value = data
+    search.value.text = route.query.search as string ?? ''
   })
 
 // Funkcija pretrage
