@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { useLogin } from '@/hooks/login.hook';
-import type { DetailsModel } from '@/models/details.mode';
+import type { DetailsModel } from '@/models/details.model';
 import type { OrderModel } from '@/models/order.model';
 import { FlightService } from '@/services/flight.service';
 import { UserService } from '@/services/user.service';
-import { formatDate } from '@/utils';
+import { formatDate, showConfirm } from '@/utils';
 import { computed, onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -58,20 +58,19 @@ const price = computed(() => {
 })
 
 function createOrder() {
-    if (!confirm('Are you sure you want to place an order?'))
-        return
-
-    UserService.addOrder({
-        flightId: order.flightId ?? id,
-        createdAt: new Date().toISOString(),
-        paidAt: null,
-        deletedAt: null,
-        isReturnTicket: order.isReturnTicket ?? false,
-        flightClass: order.flightClass ?? 'f',
-        pricePerTicket: pricePerTicket.value,
-        ticketCount: order.ticketCount ?? 1
+    showConfirm('Are you sure you want to place an order?', () => {
+        UserService.addOrder({
+            flightId: order.flightId ?? id,
+            createdAt: new Date().toISOString(),
+            paidAt: null,
+            deletedAt: null,
+            isReturnTicket: order.isReturnTicket ?? false,
+            flightClass: order.flightClass ?? 'f',
+            pricePerTicket: pricePerTicket.value,
+            ticketCount: order.ticketCount ?? 1
+        })
+        router.push('/user')
     })
-    router.push('/user')
 }
 
 onMounted(() => validateLogin())
@@ -107,7 +106,8 @@ onMounted(() => validateLogin())
                         <input type="number" class="form-control" v-model="order.ticketCount">
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="flexCheckChecked" v-model="order.isReturnTicket">
+                        <input class="form-check-input" type="checkbox" id="flexCheckChecked"
+                            v-model="order.isReturnTicket">
                         <label class="form-check-label" for="flexCheckChecked">
                             I want a return ticket
                         </label>

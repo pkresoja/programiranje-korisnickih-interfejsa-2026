@@ -114,4 +114,25 @@ export class UserService {
             localStorage.setItem(USERS_KEY, JSON.stringify(users))
         }
     }
+
+    static createUser(email: string, password: string, destination: string) {
+        const users = this.getUsers()
+
+        for (let user of users) {
+            if (user.email === email) {
+                return 'Email already in use!'
+            }
+        }
+
+        if (password.length < 8) {
+            return 'Password must be at least 8 chars long!'
+        }
+
+        users.push({
+            email, password, destination, orders: []
+        })
+
+        localStorage.setItem(USERS_KEY, JSON.stringify(users))
+        return null
+    }
 }

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { UserService } from '@/services/user.service';
+import { showError } from '@/utils';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -15,7 +16,7 @@ function login() {
         return
     }
 
-    alert('Bad username or password!')
+    showError('Bad username or password!')
 }
 </script>
 

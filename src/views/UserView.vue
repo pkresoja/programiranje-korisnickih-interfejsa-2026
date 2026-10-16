@@ -4,7 +4,8 @@ import { useLogin } from '@/hooks/login.hook';
 import type { OrderModel } from '@/models/order.model';
 import { FlightService } from '@/services/flight.service';
 import { UserService } from '@/services/user.service';
-import { formatDate, getPriceForOrder } from '@/utils';
+import { formatDate, getPriceForOrder, showConfirm, showError, showLoading } from '@/utils';
+import Swal from 'sweetalert2';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -34,6 +35,7 @@ FlightService.getDeparturesByIds(flightIds ?? [])
         }
 
         orders.value = unpaid
+        Swal.close()
     })
 
 const unpaidOrders = computed(() => {
@@ -45,11 +47,10 @@ const paidOrders = computed(() => {
 })
 
 function removeOrder(order: OrderModel) {
-    if (!confirm(`Delete order created at ${formatDate(order.createdAt)} to ${order.destination}?`))
-        return
-
-    UserService.removeOrder(order)
-    window.location.reload()
+    showConfirm(`Delete order created at ${formatDate(order.createdAt)} to ${order.destination}?`, () => {
+        UserService.removeOrder(order)
+        window.location.reload()
+    })
 }
 
 const total = computed(() => {
@@ -62,43 +63,44 @@ const total = computed(() => {
 })
 
 function pay() {
-    if (!confirm('Are you sure you want to pay?')) {
-        return
-    }
-
-    UserService.pay()
+    showConfirm('Are you sure you want to pay?', () => {
+        UserService.pay()
+        window.location.reload()
+    })
 }
 
 function changePassword() {
-    if (!confirm('Are you sure you want to change the password?'))
-        return
+    showConfirm('Are you sure you want to change the password?', () => {
+        if (passReset.value.newPass == '') {
+            showError(`New password can't be empty!`)
+            return
+        }
 
-    if (passReset.value.newPass == '') {
-        alert(`New password can't be EMPTY!`)
-        return
-    }
+        if (passReset.value.newPass == user?.password) {
+            showError(`You can't use the same password!`)
+            return
+        }
 
-    if (passReset.value.newPass == user?.password) {
-        alert(`You can't use the same password!`)
-        return
-    }
+        if (passReset.value.currentPass != user?.password) {
+            showError('Invalid password!')
+            return
+        }
 
-    if (passReset.value.currentPass != user?.password) {
-        alert('Invalid password!')
-        return
-    }
+        if (passReset.value.newPass != passReset.value.repeatPass) {
+            showError(`New passwords don't match!`)
+            return
+        }
 
-    if (passReset.value.newPass != passReset.value.repeatPass) {
-        alert(`New passwords don't match!`)
-        return
-    }
-
-    UserService.changePassword(passReset.value.newPass)
-    UserService.logout()
-    router.push('/login')
+        UserService.changePassword(passReset.value.newPass)
+        UserService.logout()
+        router.push('/login')
+    })
 }
 
-onMounted(() => validateLogin())
+onMounted(() => {
+    validateLogin()
+    showLoading()
+})
 </script>
 
 <template>

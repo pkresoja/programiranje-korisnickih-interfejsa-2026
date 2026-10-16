@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
-import DetailsView from '@/views/DetailsView.vue'
 import LoginView from '@/views/LoginView.vue'
 import UserView from '@/views/UserView.vue'
 import OrderView from '@/views/OrderView.vue'
 import AIDetails from '@/views/AIDetails.vue'
+import SignupView from '@/views/SignupView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +50,13 @@ const router = createRouter({
       component: OrderView,
       meta: {
         title: 'New Order'
+      }
+    },
+    {
+      path: '/signup',
+      component: SignupView,
+      meta: {
+        title: 'Sign Up'
       }
     }
   ],

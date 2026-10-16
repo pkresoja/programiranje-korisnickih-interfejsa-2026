@@ -3,7 +3,7 @@ import InfoCard from '@/components/InfoCard.vue';
 import type { FlightModel } from '@/models/flight.model';
 import { FlightService } from '@/services/flight.service';
 import { formatDate } from '@/utils';
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const flights = ref<FlightModel[]>([])

@@ -65,7 +65,15 @@ export class FlightService {
             data: ids
         })
 
+        
+        // Fake sleep for 5 sec
+        await new Promise(resolve => setTimeout(resolve, 2000))
+
         return this.mapResponseToObject(rsp)
+    }
+
+    static async getDestinations() {
+        return await client.get('/destination')
     }
 
     static async mapResponseToObject(rsp: AxiosResponse) {

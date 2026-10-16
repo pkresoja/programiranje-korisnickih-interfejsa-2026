@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { DetailsModel } from '@/models/details.model';
 import { FlightService } from '@/services/flight.service';
-import { formatDate } from '@/utils';
-import { ref, computed } from 'vue';
+import { formatDate, showLoading } from '@/utils';
+import Swal from 'sweetalert2';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -46,6 +47,8 @@ async function fetchWeatherForDestination(destination: string) {
             temp: Math.round(data.current.temperature_2m),
             ...getWeatherCondition(code)
          };
+
+         Swal.close()
       }
    } catch (e) {
       console.error('Failed to load weather', e);
@@ -76,6 +79,8 @@ function getInfoClass(d: DetailsModel) {
    if (new Date() < time && d.estimatedAt != null) return 'badge bg-warning-subtle text-warning border border-warning px-2 py-1';
    if (new Date() > time) return 'badge bg-danger-subtle text-danger border border-danger px-2 py-1';
 }
+
+onMounted(()=>showLoading())
 </script>
 
 <template>
@@ -150,9 +155,9 @@ function getInfoClass(d: DetailsModel) {
                </div>
 
                <div class="card-footer bg-transparent border-secondary p-3">
-                  <button class="btn btn-primary w-100 py-2 fw-semibold shadow-sm">
+                  <RouterLink class="btn btn-primary w-100 py-2 fw-semibold shadow-sm" :to="`/order/${id}`">
                      <i class="fa-solid fa-cart-shopping me-2"></i> Book Ticket for {{ details.destination }}
-                  </button>
+                  </RouterLink>
                </div>
             </div>
          </div>

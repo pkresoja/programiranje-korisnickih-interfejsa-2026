@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { DetailsModel } from '@/models/details.model';
 import { FlightService } from '@/services/flight.service';
-import { formatDate } from '@/utils';
-import { ref } from 'vue';
+import { formatDate, showLoading } from '@/utils';
+import Swal from 'sweetalert2';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute()
@@ -10,33 +11,38 @@ const id = Number(route.params.id)
 
 const details = ref<DetailsModel>()
 FlightService.getDepartureDetails(id)
-   .then(data => details.value = data)
+   .then(data => {
+      Swal.close()
+      details.value = data
+   })
 
 function getInfoText(d: DetailsModel) {
    const time = new Date(d.scheduledAt)
 
    if (new Date() < time && d.estimatedAt == null)
-   return 'On Time'
+      return 'On Time'
 
    if (new Date() < time && d.estimatedAt != null)
-   return 'Departing Late'
+      return 'Departing Late'
 
    if (new Date() > time)
-   return 'Departed'
+      return 'Departed'
 }
 
 function getInfoClass(d: DetailsModel) {
    const time = new Date(d.scheduledAt)
 
    if (new Date() < time && d.estimatedAt == null)
-   return 'text-success fw-bold'
+      return 'text-success fw-bold'
 
    if (new Date() < time && d.estimatedAt != null)
-   return 'text-warning fw-bold'
+      return 'text-warning fw-bold'
 
    if (new Date() > time)
-   return 'text-danger fw-bold'
+      return 'text-danger fw-bold'
 }
+
+onMounted(() => showLoading())
 </script>
 
 <template>
@@ -55,10 +61,14 @@ function getInfoClass(d: DetailsModel) {
                      <i class="fa-solid fa-hashtag"></i> {{ details.flightNumber }}
                   </li>
                   <li class="list-group-item">
-                     <i class="fa-solid fa-clock-rotate-left"></i> {{ formatDate(details.scheduledAt) }}
+                     <i class="fa-solid fa-clock-rotate-left"></i>
+                     {{ formatDate(details.scheduledAt) }}
                   </li>
                   <li class="list-group-item">
-                     <i class="fa-solid fa-info"></i> <span :class="getInfoClass(details)">{{getInfoText(details)}}</span>
+                     <i class="fa-solid fa-info"></i>
+                     <span :class="getInfoClass(details)">
+                        {{ getInfoText(details) }}
+                     </span>
                   </li>
                </ul>
             </div>

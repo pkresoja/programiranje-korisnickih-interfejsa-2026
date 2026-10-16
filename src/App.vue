@@ -71,6 +71,11 @@ function search() {
                 <i class="fa-solid fa-right-to-bracket"></i> Login
               </RouterLink>
             </li>
+            <li class="nav-item">
+              <RouterLink class="nav-link" active-class="active" to="/signup">
+                <i class="fa-solid fa-user-plus"></i> Signup
+              </RouterLink>
+            </li>
           </template>
         </ul>
         <form class="d-flex" role="search" @submit.prevent="search">
