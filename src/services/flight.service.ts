@@ -22,18 +22,21 @@ export class FlightService {
         return this.mapResponseToObject(rsp)
     }
 
-    static async getDepartureDetails(id: number) {
-        const details = await client.get(`/${id}`)
-
-        const other = await client.request({
+    static async getByDestination(dest: string) {
+        return await client.request({
             method: 'GET',
-            url: `/destination/${details.data.destination}`,
+            url: `/destination/${dest}`,
             params: {
                 type: 'departure',
                 size: 30,
                 sort: 'scheduledAt,asc'
             }
         })
+    }
+
+    static async getDepartureDetails(id: number) {
+        const details = await client.get(`/${id}`)
+        const other = await this.getByDestination(details.data.destination)
 
         let otherButFiltered = []
         for (let obj of other.data.content) {
@@ -65,7 +68,7 @@ export class FlightService {
             data: ids
         })
 
-        
+
         // Fake sleep for 5 sec
         await new Promise(resolve => setTimeout(resolve, 2000))
 
