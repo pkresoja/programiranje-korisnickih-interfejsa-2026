@@ -3,15 +3,15 @@ import { useRouter } from 'vue-router';
 import { UserService } from './services/user.service';
 import { onMounted, ref, watch } from 'vue';
 import Chatbot from './components/Chatbot.vue';
+import { showConfirm } from './utils.ts';
 
 const router = useRouter();
 
 function logout() {
-  if (!confirm('Are you sure you want to sign out?'))
-    return;
-
-  UserService.logout();
-  router.push('/login');
+  showConfirm('Are you sure you want to sign out?', () => {
+    UserService.logout();
+    router.push('/login');
+  })
 }
 
 const searchInput = ref<string>('');
