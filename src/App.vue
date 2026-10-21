@@ -40,10 +40,14 @@ function search() {
 }
 
 onMounted(() => {
-  const theme = localStorage.getItem('theme');
+  // If no theme is saved in localStorage, default to 'dark'
+  if (!localStorage.getItem('theme')) {
+    localStorage.setItem('theme', 'dark')
+  }
 
-  document.body.setAttribute('data-bs-theme', theme ?? 'dark');
-  themeSwitch.value = theme == 'dark';
+  const theme = localStorage.getItem('theme')
+  document.body.setAttribute('data-bs-theme', theme ?? 'dark')
+  themeSwitch.value = theme === 'dark'
 });
 </script>
 
