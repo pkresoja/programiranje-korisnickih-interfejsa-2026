@@ -58,8 +58,12 @@ async function getBotResponse(message: string) {
         if (rsp.data.content.length == 0)
             return 'No flights found for ' + dest
 
-        const list = rsp.data.content.map((f: any) => `<li>${formatDate(f.scheduledAt)} AAAA</li>`)
-        return `<p>I have found the following:</p><ul>${list}</ul>`
+        let list = '<ul>'
+        for (let f of rsp.data.content) {
+            list += `<li><a href="/details/${f.id}" target="_blank">(${f.id}) ${formatDate(f.scheduledAt)}</li></a>`
+        }
+        list += '</ul>'
+        return `<p>I have found the following:</p>${list}`
     }
 
     return `Didn't quite get you! Can you ask differently?`
