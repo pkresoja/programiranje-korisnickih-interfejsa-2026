@@ -175,7 +175,7 @@ onMounted(()=>showLoading())
                </div>
                <div class="card-body p-0">
                   <div class="ratio ratio-21x9 map-container">
-                     <iframe :src="mapEmbedUrl" class="border-0 w-100" allowfullscreen="" loading="lazy"
+                     <iframe :src="mapEmbedUrl" class="border-0 w-100" allowfullscreen="true" loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade" title="Destination Map">
                      </iframe>
                   </div>
